@@ -1,10 +1,8 @@
 let gridworld = null;
-let robots = null;
-let num_robots = 2; 
-let robot_colors = ["darkslateblue","pink","purple","green"]
+let robot = null;
 
 var canvas = null;
-
+let ws = null;
 function draw() {
     canvas = document.getElementById("gridworld");
 
@@ -17,22 +15,53 @@ function draw() {
 
         gridworld = new GridWorld(ctx,rows,cols,cwidth,cheight);
         gridworld.drawGrid(canvas)
-        robots = []
-        for (let i = 0; i<num_robots; i++)
-        {
-            robots[i] = new Robot(ctx,5,robot_colors[i]);
-        }
-        move_robot(0,0,0); 
-        move_robot(1,9,9);
+        robot = new Robot(ctx,5,"darkslateblue");
+        move_robot(0,0);
+
     }
     document.getElementById("movebutton").addEventListener("click",move);
+    document.getElementById("startbutton").addEventListener("click",start);
 }
+function dows() {
+    ws.onopen = function () {
+        document.getElementById("wsmsg").innerText = "Opened connection to websocket";
+        console.info("opened connection to websocket");
+    }
+    ws.onmessage = function (evt) {
+        document.getElementById("wsmsg").innerText = "Message: " + evt.data;
+        console.info("Got a message");
+    }
+    ws.onclose = function () {
+        document.getElementById("wsmsg").innerText = "<br>WebSocket closed";
+    };
 
+    ws.onerror = function (err) {
+        document.getElementById("wsmsg").innerText = "Error: " + err;
+    };
+}
+function start()
+{
+    if(ws!=null)
+    {
+        ws.close();
+    }
+    try {
+        ws = new WebSocket("ws://localhost:8080/gridworld/example");
+        dows();
+        if (ws.readyState == 1) {
+            ws.send("started");
+            console.info("sent to ws ", "started")
+        }
+    }
+    catch (e) {
+        console.log("Unable to connect to websocket")
+        console.log(e);
+    }
+}
 function move() {
     // just redraw the robot in a different location
     // get the robot's grid val
     // just move it to the next val
-    robot = robots[0];
     let rr = robot.row;
     let rc = robot.col;
     if(rr<gridworld.numr-1)
@@ -49,22 +78,20 @@ function move() {
 
     gridworld.clearGrid();
     gridworld.restoreGrid();
-    move_robot(0,rr,rc);
-    keep_robot(1);
+    move_robot(rr,rc);
     console.info("Moving to ",rr,rc);
 
 }
-function move_robot(robot_id,rr,rc)
+function move_robot(rr,rc)
 {
     let robot_xy = gridworld.get_cell_center(rr,rc);
-    let robot = robots[robot_id];
     robot.set_grid_val(rr,rc);
     robot.draw(robot_xy[0],robot_xy[1]);
-}
-function keep_robot(robot_id)
-{
-    let robot = robots[robot_id]; 
-    robot.draw(robot.row,robot.col);
+    if(ws!=null && ws.readyState==1) {
+        let moved_literal = `movebase_result(${rr}_${rc},3)`;
+        ws.send(moved_literal);
+        console.info("Sent to ws ", moved_literal);
+    }
 }
 class Robot{
     constructor(ctx,radius,color) {
