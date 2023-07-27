@@ -64,7 +64,7 @@ function move_robot(robot_id,rr,rc)
 function keep_robot(robot_id)
 {
     let robot = robots[robot_id]; 
-    robot.draw(robot.row,robot.col);
+    robot.draw(robot.x,robot.y);
 }
 class Robot{
     constructor(ctx,radius,color) {
