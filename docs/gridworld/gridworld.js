@@ -5,6 +5,7 @@ let robot_colors = ["darkslateblue","pink","purple","green"]
 
 var canvas = null;
 
+
 function draw() {
     canvas = document.getElementById("gridworld");
 

@@ -5,14 +5,28 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
     <script src="gridworld.js" defer></script>
+    <script scr="grid_to_graph.js" defer></script>
     <title>Grid World Motion</title>
 </head>
 <body onload="draw()">
+    <div>
 <div id="simulator">
     <canvas id="gridworld" width="550px" height="550px"></canvas>
     <!-- <button id="startbutton">Start</button> -->
     <button id="movebutton">Move</button>
 </div>
 <div id="wsmsg"></div>
+</div>
+
+<!-- <div onload="drawGraph()">
+<div>
+    <div id="grapher">
+        <canvas id="graphCanvas" width="550px" height="550px">
+
+        </canvas>
+    </div>
+</div>
+   
+</div> -->
 </body>
 </html>
