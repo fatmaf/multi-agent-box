@@ -159,41 +159,48 @@ function doDFSOrBFS(test_graph, doBFS = false) {
 }
 function addGridElem(graph_array)
 {
-    const elem_type="table";
+    // const elem_type="table";
     let div_elem = document.getElementById("textgrapher");
-    let table_elem = document.createElement(elem_type);
-    table_elem.style.border="1px solid black";
-    table_elem.style.borderCollapse="collapse";
+    // let table_elem = document.createElement(elem_type);
+    // table_elem.style.border="1px solid black";
+    // table_elem.style.borderCollapse="collapse";
+    // table_elem.style.color="white";
     const num_rows = graph_array.length; 
     if (num_rows> 0)
     {
         const num_cols = graph_array[0].length;
+        div_elem.style.setProperty(`grid-template`,`repeat(${num_rows},auto) / repeat(${num_cols},auto)`);
         for(let row = 0; row<num_rows; row++)
         {
-            let row_elem=table_elem.insertRow(-1);
+            // let row_elem=table_elem.insertRow(-1);
+            
             for(let col = 0; col<num_cols; col++)
             {
+                
 
-                let cell_elem = row_elem.insertCell(col);
-                cell_elem.id=`${row}-${col}`;
-                cell_elem.style.align="center"; 
-                cell_elem.style.border="1px solid black";
-                cell_elem.style.borderCollapse="collapse";
+                let cell_elem = document.createElement("div");//row_elem.insertCell(col);
+                
+                cell_elem.id=`${getLinearIndex(row,col,num_cols)}`;
+                // cell_elem.style.align="center"; 
+                // cell_elem.style.border="1px solid black";
+                // cell_elem.style.borderCollapse="collapse";
                 cell_elem.addEventListener("click",(event)=>{
                     console.log(`Cell clicked: ${event.target.id}`);
                 });
-                let cell_text_elem = document.createTextNode(""+graph_array[row][col]);
-                cell_elem.appendChild(cell_text_elem);
+                div_elem.appendChild(cell_elem);
+                // let cell_elem_text = document.createTextNode("0");
+                
+                // cell_elem.appendChild(cell_elem_text)
             }
-            table_elem.appendChild(row_elem);
+            // table_elem.appendChild(row_elem);
 
         }
     }
-    div_elem.appendChild(table_elem);
+    // div_elem.appendChild(table_elem);
 
 }
 function testGraph() {
-    let test_graph = new GridGraph(2,2);
+    let test_graph = new GridGraph(5,5);
     let graph_grid = test_graph.getGrid();
     addGridElem(graph_grid);
     console.log("BFS");

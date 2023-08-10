@@ -1,0 +1,10 @@
+#textgrapher{
+    display: grid;
+}
+#textgrapher > div {
+    border: 1px solid black;
+    min-width: 50px;
+    min-height: 50px;
+    width: auto;
+    aspect-ratio: 1/1;
+  }
