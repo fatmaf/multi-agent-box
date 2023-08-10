@@ -159,8 +159,11 @@ function doDFSOrBFS(test_graph, doBFS = false) {
 }
 function addGridElem(graph_array)
 {
+    const elem_type="table";
     let div_elem = document.getElementById("textgrapher");
-    let table_elem = document.createElement("table");
+    let table_elem = document.createElement(elem_type);
+    table_elem.style.border="1px solid black";
+    table_elem.style.borderCollapse="collapse";
     const num_rows = graph_array.length; 
     if (num_rows> 0)
     {
@@ -170,10 +173,19 @@ function addGridElem(graph_array)
             let row_elem=table_elem.insertRow(-1);
             for(let col = 0; col<num_cols; col++)
             {
+
                 let cell_elem = row_elem.insertCell(col);
+                cell_elem.id=`${row}-${col}`;
+                cell_elem.style.align="center"; 
+                cell_elem.style.border="1px solid black";
+                cell_elem.style.borderCollapse="collapse";
+                cell_elem.addEventListener("click",(event)=>{
+                    console.log(`Cell clicked: ${event.target.id}`);
+                });
                 let cell_text_elem = document.createTextNode(""+graph_array[row][col]);
                 cell_elem.appendChild(cell_text_elem);
             }
+            table_elem.appendChild(row_elem);
 
         }
     }
