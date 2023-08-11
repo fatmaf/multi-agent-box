@@ -33,11 +33,12 @@ function clipNeighbors(neighbors, max_rows, max_cols) {
 }
 
 class GridGraph {
-    constructor(max_rows=0, max_cols=0) {
+    constructor(max_rows=0, max_cols=0,graph_name="default") {
         this.max_cols = max_cols;
         this.max_rows = max_rows;
         this._map = new Map();
         this.root = null;
+        this._name = `graph-${graph_name}-${max_rows}r-${max_cols}c`;
         // a 2x2 grid to a graph 
         let rows = this.max_rows;
         let cols = this.max_cols;
@@ -70,7 +71,9 @@ class GridGraph {
         return grid; 
         
     }
-
+    getName(){
+        return this._name;
+    }
     addVertex(vertex) {
         if (this.root == null) {
             this.root = vertex;
@@ -122,9 +125,15 @@ class GridGraph {
             return [];
         }
     }
-
-
-
+    getCellName(cell_row,cell_col){
+        const cell_ind = getLinearIndex(cell_row,cell_col,this.max_cols);
+       return this.getCellNameLin(cell_ind);
+        
+    }
+    getCellNameLin(cell_ind)
+    {
+        return `${this._name}-${cell_ind}`;
+    }
 }
 function doBFS(test_graph) {
     doDFSOrBFS(test_graph, true);
@@ -132,7 +141,7 @@ function doBFS(test_graph) {
 function doDFS(test_graph) {
     doDFSOrBFS(test_graph, false);
 }
-function doDFSOrBFS(test_graph, doBFS = false) {
+function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
 
     let visited = [];
     let tovisit = [test_graph.root];
@@ -142,29 +151,37 @@ function doDFSOrBFS(test_graph, doBFS = false) {
             current_v = tovisit.shift();
         }
         else { current_v = tovisit.pop() };
+
         if (!visited.includes(current_v)) {
             visited.push(current_v);
             console.log(current_v);
-
+            if (doColor)
+            {
+                setTimeout(colorElem(test_graph.getCellNameLin(current_v),"pink"),2*1000);
+            }
             let edges = test_graph.getEdges(current_v);
             for (const edge of edges) {
                 if (!tovisit.includes(edge) && !visited.includes(edge)) {
                     tovisit.push(edge);
                 }
             }
-
-
+            
         }
     }
 }
-function addGridElem(graph_array)
+
+function colorElem(elem_id,color_value="white")
 {
-    // const elem_type="table";
+    
+    const elem = document.getElementById(elem_id);
+    elem.style.backgroundColor=color_value;
+ 
+}
+function addGridElem(test_graph)
+{
+
     let div_elem = document.getElementById("textgrapher");
-    // let table_elem = document.createElement(elem_type);
-    // table_elem.style.border="1px solid black";
-    // table_elem.style.borderCollapse="collapse";
-    // table_elem.style.color="white";
+    let graph_array = test_graph.getGrid();
     const num_rows = graph_array.length; 
     if (num_rows> 0)
     {
@@ -172,37 +189,25 @@ function addGridElem(graph_array)
         div_elem.style.setProperty(`grid-template`,`repeat(${num_rows},auto) / repeat(${num_cols},auto)`);
         for(let row = 0; row<num_rows; row++)
         {
-            // let row_elem=table_elem.insertRow(-1);
-            
             for(let col = 0; col<num_cols; col++)
             {
-                
-
-                let cell_elem = document.createElement("div");//row_elem.insertCell(col);
-                
-                cell_elem.id=`${getLinearIndex(row,col,num_cols)}`;
-                // cell_elem.style.align="center"; 
-                // cell_elem.style.border="1px solid black";
-                // cell_elem.style.borderCollapse="collapse";
+                let cell_elem = document.createElement("div");   
+                cell_elem.id=test_graph.getCellName(row,col);
                 cell_elem.addEventListener("click",(event)=>{
                     console.log(`Cell clicked: ${event.target.id}`);
                 });
                 div_elem.appendChild(cell_elem);
-                // let cell_elem_text = document.createTextNode("0");
-                
-                // cell_elem.appendChild(cell_elem_text)
+
             }
-            // table_elem.appendChild(row_elem);
 
         }
     }
-    // div_elem.appendChild(table_elem);
 
 }
 function testGraph() {
     let test_graph = new GridGraph(5,5);
-    let graph_grid = test_graph.getGrid();
-    addGridElem(graph_grid);
+    
+    addGridElem(test_graph);
     console.log("BFS");
     doBFS(test_graph);
     console.log("DFS");
