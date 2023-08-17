@@ -175,6 +175,7 @@ function colorElem(elem_id, color_value = "white") {
     const elem = document.getElementById(elem_id);
     elem.style.backgroundColor = color_value;
     console.log(`Changing color of elem ${elem_id}`);
+       
 }
 function addGridElem(test_graph) {
 
@@ -187,23 +188,18 @@ function addGridElem(test_graph) {
         for (let row = 0; row < num_rows + 1; row++) {
             for (let col = 0; col < num_cols + 1; col++) {
                 let cell_elem = document.createElement("div");
-                cell_elem.style.display="flex";
-                cell_elem.style.justifyContent="center";
-                cell_elem.style.alignItems="center";
                 const cell_row = row - 1;
                 const cell_col = col - 1;
                 // first row is header 
                 // first col is also header 
-                if (row == 0) {
-                    if (col > 0) {
-                        cell_elem.innerText = `${cell_col}`;
-                    }
-                }
-                else if (col == 0) {
+                if (row == 0 && col > 0) {
 
-if (row > 0) {
-                        cell_elem.innerText = `${cell_row}`;
-                    }
+                    cell_elem.innerText = `${cell_col}`;
+                }
+                else if (col == 0 && row > 0) {
+
+                    cell_elem.innerText = `${cell_row}`;
+
                 }
                 else {
 
