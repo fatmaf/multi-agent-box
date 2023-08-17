@@ -145,6 +145,7 @@ function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
 
     let visited = [];
     let tovisit = [test_graph.root];
+    let node_counter = 0; 
     while (tovisit.length > 0) {
         let current_v;
         if (doBFS) {
@@ -153,11 +154,13 @@ function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
         else { current_v = tovisit.pop() };
 
         if (!visited.includes(current_v)) {
+            node_counter +=1;
             visited.push(current_v);
             console.log(current_v);
             if (doColor)
             {
-                setTimeout(colorElem(test_graph.getCellNameLin(current_v),"pink"),2*1000);
+                const cell_elem_id = test_graph.getCellNameLin(current_v);
+                setTimeout(colorElem,node_counter*1000,cell_elem_id,"pink");
             }
             let edges = test_graph.getEdges(current_v);
             for (const edge of edges) {
@@ -175,7 +178,7 @@ function colorElem(elem_id,color_value="white")
     
     const elem = document.getElementById(elem_id);
     elem.style.backgroundColor=color_value;
- 
+    console.log(`Changing color of elem ${elem_id}`);
 }
 function addGridElem(test_graph)
 {

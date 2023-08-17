@@ -1,3 +1,11 @@
+body{
+    margin:5%;
+    padding:5%;
+}
+#grapher{
+    height: 50dvh;
+    width: 50dvh;
+}
 #textgrapher{
     display: grid;
 }
@@ -5,6 +13,6 @@
     border: 1px solid black;
     min-width: 50px;
     min-height: 50px;
-    width: auto;
+    height: auto;
     aspect-ratio: 1/1;
   }
