@@ -21,7 +21,7 @@ function clipNeighbors(neighbors, max_rows, max_cols) {
     let clipped = [];
     const row_index = 0;
     const col_index = 1;
-    for (let i=0; i< neighbors.length; i++) {
+    for (let i = 0; i < neighbors.length; i++) {
         const xy = neighbors[i];
         const row = xy[row_index];
         const col = xy[col_index];
@@ -33,7 +33,7 @@ function clipNeighbors(neighbors, max_rows, max_cols) {
 }
 
 class GridGraph {
-    constructor(max_rows=0, max_cols=0,graph_name="default") {
+    constructor(max_rows = 0, max_cols = 0, graph_name = "default") {
         this.max_cols = max_cols;
         this.max_rows = max_rows;
         this._map = new Map();
@@ -46,11 +46,11 @@ class GridGraph {
         // add them to the graph 
         // index = linear 
 
-        for (let row = 0; row< this.max_rows; row++) {
-            for (let col = 0; col<this.max_cols; col++) {
+        for (let row = 0; row < this.max_rows; row++) {
+            for (let col = 0; col < this.max_cols; col++) {
                 const nodeNum = getLinearIndex(row, col, this.max_cols);
                 const neighbors = clipNeighbors(getNeighbors(row, col), rows, cols);
-                for (let i=0; i< neighbors.length; i++) {
+                for (let i = 0; i < neighbors.length; i++) {
                     const neighbor = neighbors[i];
                     const destNum = getLinearIndex(neighbor[0], neighbor[1], cols);
                     this.addEdge(nodeNum, destNum);
@@ -60,18 +60,17 @@ class GridGraph {
 
     }
 
-    getGrid(){
-        let grid = [...Array(this.max_rows).keys()].map(i=>Array(this.max_cols));
+    getGrid() {
+        let grid = [...Array(this.max_rows).keys()].map(i => Array(this.max_cols));
         // go over the graph vertices and add them 
-        for (let linIndex in [ ...this._map.keys()])
-        {
-            let rowcol = getRowCol(linIndex,this.max_cols);
-            grid[rowcol[0]][rowcol[1]] = linIndex; 
+        for (let linIndex in [...this._map.keys()]) {
+            let rowcol = getRowCol(linIndex, this.max_cols);
+            grid[rowcol[0]][rowcol[1]] = linIndex;
         }
-        return grid; 
-        
+        return grid;
+
     }
-    getName(){
+    getName() {
         return this._name;
     }
     addVertex(vertex) {
@@ -125,13 +124,12 @@ class GridGraph {
             return [];
         }
     }
-    getCellName(cell_row,cell_col){
-        const cell_ind = getLinearIndex(cell_row,cell_col,this.max_cols);
-       return this.getCellNameLin(cell_ind);
-        
+    getCellName(cell_row, cell_col) {
+        const cell_ind = getLinearIndex(cell_row, cell_col, this.max_cols);
+        return this.getCellNameLin(cell_ind);
+
     }
-    getCellNameLin(cell_ind)
-    {
+    getCellNameLin(cell_ind) {
         return `${this._name}-${cell_ind}`;
     }
 }
@@ -141,11 +139,11 @@ function doBFS(test_graph) {
 function doDFS(test_graph) {
     doDFSOrBFS(test_graph, false);
 }
-function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
+function doDFSOrBFS(test_graph, doBFS = false, doColor = true) {
 
     let visited = [];
     let tovisit = [test_graph.root];
-    let node_counter = 0; 
+    let node_counter = 0;
     while (tovisit.length > 0) {
         let current_v;
         if (doBFS) {
@@ -154,13 +152,12 @@ function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
         else { current_v = tovisit.pop() };
 
         if (!visited.includes(current_v)) {
-            node_counter +=1;
+            node_counter += 1;
             visited.push(current_v);
             console.log(current_v);
-            if (doColor)
-            {
+            if (doColor) {
                 const cell_elem_id = test_graph.getCellNameLin(current_v);
-                setTimeout(colorElem,node_counter*1000,cell_elem_id,"pink");
+                setTimeout(colorElem, node_counter * 1000, cell_elem_id, "pink");
             }
             let edges = test_graph.getEdges(current_v);
             for (const edge of edges) {
@@ -168,37 +165,54 @@ function doDFSOrBFS(test_graph, doBFS = false, doColor=true) {
                     tovisit.push(edge);
                 }
             }
-            
+
         }
     }
 }
 
-function colorElem(elem_id,color_value="white")
-{
-    
+function colorElem(elem_id, color_value = "white") {
+
     const elem = document.getElementById(elem_id);
-    elem.style.backgroundColor=color_value;
+    elem.style.backgroundColor = color_value;
     console.log(`Changing color of elem ${elem_id}`);
 }
-function addGridElem(test_graph)
-{
+function addGridElem(test_graph) {
 
     let div_elem = document.getElementById("textgrapher");
     let graph_array = test_graph.getGrid();
-    const num_rows = graph_array.length; 
-    if (num_rows> 0)
-    {
+    const num_rows = graph_array.length;
+    if (num_rows > 0) {
         const num_cols = graph_array[0].length;
-        div_elem.style.setProperty(`grid-template`,`repeat(${num_rows},auto) / repeat(${num_cols},auto)`);
-        for(let row = 0; row<num_rows; row++)
-        {
-            for(let col = 0; col<num_cols; col++)
-            {
-                let cell_elem = document.createElement("div");   
-                cell_elem.id=test_graph.getCellName(row,col);
-                cell_elem.addEventListener("click",(event)=>{
-                    console.log(`Cell clicked: ${event.target.id}`);
-                });
+        div_elem.style.setProperty(`grid-template`, `repeat(${num_rows + 1},auto) / repeat(${num_cols + 1},auto)`);
+        for (let row = 0; row < num_rows + 1; row++) {
+            for (let col = 0; col < num_cols + 1; col++) {
+                let cell_elem = document.createElement("div");
+                cell_elem.style.display="flex";
+                cell_elem.style.justifyContent="center";
+                cell_elem.style.alignItems="center";
+                const cell_row = row - 1;
+                const cell_col = col - 1;
+                // first row is header 
+                // first col is also header 
+                if (row == 0) {
+                    if (col > 0) {
+                        cell_elem.innerText = `${cell_col}`;
+                    }
+                }
+                else if (col == 0) {
+
+if (row > 0) {
+                        cell_elem.innerText = `${cell_row}`;
+                    }
+                }
+                else {
+
+                    cell_elem.id = test_graph.getCellName(cell_row, cell_col);
+                    cell_elem.addEventListener("click", (event) => {
+                        console.log(`Cell clicked: ${event.target.id}`);
+                    });
+                }
+
                 div_elem.appendChild(cell_elem);
 
             }
@@ -208,8 +222,8 @@ function addGridElem(test_graph)
 
 }
 function testGraph() {
-    let test_graph = new GridGraph(5,5);
-    
+    let test_graph = new GridGraph(5, 5);
+
     addGridElem(test_graph);
     console.log("BFS");
     doBFS(test_graph);
