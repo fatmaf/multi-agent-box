@@ -1,32 +1,44 @@
-<!--built using https://stackoverflow.com/questions/11735856/draw-a-grid-on-an-html-5-canvas-element as the base-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="gridworld.js" defer></script>
-    <script scr="grid_to_graph.js" defer></script>
-    <title>Grid World Motion</title>
+    <script src="draw_grid.js" defer></script>
+    <title>Grid World Prototype 2.0</title>
 </head>
-<body onload="draw()">
-    <div>
-<div id="simulator">
-    <canvas id="gridworld" width="550px" height="550px"></canvas>
-    <!-- <button id="startbutton">Start</button> -->
-    <button id="movebutton">Move</button>
-</div>
-<div id="wsmsg"></div>
-</div>
+<body>
+    <main>
+        <section id="sheader">
+            <h1>Grid World Prototype 2.0</h1>
+            <p>An attempt to create an editable gridworld.</p>
+        </section>
 
-<!-- <div onload="drawGraph()">
-<div>
-    <div id="grapher">
-        <canvas id="graphCanvas" width="550px" height="550px">
-
-        </canvas>
-    </div>
-</div>
-   
-</div> -->
+        <section id="sview">
+            <article id="sview_edit_or_animate">
+                <h3>Edit or animate</h3>
+                <div id="sview_edit_bar">
+                    <label for="sview_edit_bar_rows_text">Rows</label>
+                    <input id="sview_edit_bar_rows_text" type="number" value=5>
+                    <label for="sview_edit_bar_cols_text">Cols</label>
+                    <input id="sview_edit_bar_cols_text" type="number" value=5>
+                </div>
+                <div id="sview_animate_bar"></div>
+            </article>
+            <article id="sview_grid">
+                <div id="sview_grid_view"></div>
+                <h3>Grid</h3>
+            </article>
+            <article id="sview_explanations">
+                <h3>What's happening?</h3>
+                <div id="sview_explanations_text"></div>
+            </article>
+        </section>
+        <section id="snotes">
+            
+            
+        </section>
+    </main>
+    
 </body>
 </html>
