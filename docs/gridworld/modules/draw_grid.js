@@ -1,3 +1,5 @@
+
+
 function attach_update_grid_to_elems()
 {
      document.getElementById("sview_edit_bar_rows_text").addEventListener("input",update_grid);
@@ -48,16 +50,45 @@ function update_grid_rows_cols(div_elem,max_rows,max_cols)
 
 }
 
+function cell_click_event(event){
+    console.log(`Cell clicked: ${event.target.id}`);
+    // check if any of the radio buttons are checked 
+    const checked_state = get_selected_state(); 
+    if (checked_state!=null)
+    {
+        const color_here = get_color_for_state(checked_state);
+        // console.log(`Current state: ${checked_state}-color:${color_here}`);
+        event.target.style.backgroundColor = color_here;
+    }
+
+}
+function get_color_for_state(cell_state)
+{
+    const cell_states = ["Goal","Start","Obstacle","Empty"];
+    const cell_state_colors = {"Goal":"forestgreen","Start":"skyblue","Empty":"white","Obstacle":"black"};
+    return cell_state_colors[cell_state];
+}
+function get_selected_state()
+{
+    const possible_states = document.getElementsByName("sview_edit_bar_mark_cell"); 
+    for (const state of possible_states)
+    {
+        if ((state.type == "radio") && (state.checked))
+        {
+            return state.value;
+        }
+    }
+    return null;
+}
 function create_grid_cell_element(id_prefix,row_num,col_num)
 {
     let cell_elem = document.createElement("div");
     cell_elem.className="grid_cell";
     cell_elem.id = `${id_prefix}-${row_num}-${col_num}`;
-    cell_elem.addEventListener("click", (event) => {
-        console.log(`Cell clicked: ${event.target.id}`);
-    });
+    cell_elem.addEventListener("click", cell_click_event);
     return cell_elem;
 }
+
 function create_cell_label_elem(id_prefix,row_num,col_num)
 {
     let cell_elem=document.createElement("div"); 
@@ -68,5 +99,6 @@ function create_cell_label_elem(id_prefix,row_num,col_num)
 
 }
 
-update_grid();
-attach_update_grid_to_elems();
+
+
+export {update_grid,attach_update_grid_to_elems};

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="draw_grid.js" defer></script>
+    <link rel="stylesheet" href="./grid_style.css">
+    <!-- <script src="draw_grid.js" defer></script> -->
+    <!-- <script type="module" src="./main.js"></script> -->
+    <script type="module" src="./main.js" defer></script>
     <title>Grid World Prototype 2.0</title>
 </head>
 <body>
@@ -22,6 +24,18 @@
                     <input id="sview_edit_bar_rows_text" type="number" value=5>
                     <label for="sview_edit_bar_cols_text">Cols</label>
                     <input id="sview_edit_bar_cols_text" type="number" value=5>
+                    <fieldset>
+                        <legend>Mark cell</legend>
+                        <input type="radio" name="sview_edit_bar_mark_cell" id="sview_edit_bar_goal" value="Goal">
+                        <label for="sview_edit_bar_goal">Goal</label>
+                        <input type="radio" name="sview_edit_bar_mark_cell" id="sview_edit_bar_start" value="Start">
+                        <label for="sview_edit_bar_start">Start</label>
+                        <input type="radio" name="sview_edit_bar_mark_cell" id="sview_edit_bar_obstacle" value="Obstacle">
+                        <label for="sview_edit_bar_obstacle">Obstacle</label>
+                        <input type="radio" name="sview_edit_bar_mark_cell" id="sview_edit_bar_empty" value="Empty" checked>
+                        <label for="sview_edit_bar_empty">Empty</label>
+
+                    </fieldset>
                 </div>
                 <div id="sview_animate_bar"></div>
             </article>
