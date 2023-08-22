@@ -35,3 +35,17 @@ main,section,article{
     
 }
 
+.cell_state_empty{
+    background-color: white;
+}
+
+.cell_state_obstacle{
+    background-color: black;
+}
+.cell_state_goal{
+    background-color: forestgreen;
+}
+.cell_state_start{
+    background-color: skyblue;
+}
+

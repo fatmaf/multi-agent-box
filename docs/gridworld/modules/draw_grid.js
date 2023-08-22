@@ -4,6 +4,7 @@ function attach_update_grid_to_elems()
 {
      document.getElementById("sview_edit_bar_rows_text").addEventListener("input",update_grid);
     document.getElementById("sview_edit_bar_cols_text").addEventListener("input",update_grid);
+    document.getElementById("sview_edit_bar_reset").addEventListener("click",update_grid);
     
 }
 function get_number_input_elem_value(elem_id)
@@ -56,17 +57,15 @@ function cell_click_event(event){
     const checked_state = get_selected_state(); 
     if (checked_state!=null)
     {
-        const color_here = get_color_for_state(checked_state);
-        // console.log(`Current state: ${checked_state}-color:${color_here}`);
-        event.target.style.backgroundColor = color_here;
+        update_elem_state(event.target,checked_state);
     }
-
 }
-function get_color_for_state(cell_state)
+function update_elem_state(cell_elem, new_state)
 {
-    const cell_states = ["Goal","Start","Obstacle","Empty"];
-    const cell_state_colors = {"Goal":"forestgreen","Start":"skyblue","Empty":"white","Obstacle":"black"};
-    return cell_state_colors[cell_state];
+    const current_state = cell_elem.classList.item(1);
+    cell_elem.classList.remove(current_state); 
+    const new_state_name = `cell_state_${new_state.toLowerCase()}`
+    cell_elem.classList.add(new_state_name);
 }
 function get_selected_state()
 {
@@ -83,7 +82,9 @@ function get_selected_state()
 function create_grid_cell_element(id_prefix,row_num,col_num)
 {
     let cell_elem = document.createElement("div");
-    cell_elem.className="grid_cell";
+    // cell_elem.className="grid_cell";
+    cell_elem.classList.add("grid_cell");
+    cell_elem.classList.add("cell_state_empty");
     cell_elem.id = `${id_prefix}-${row_num}-${col_num}`;
     cell_elem.addEventListener("click", cell_click_event);
     return cell_elem;
