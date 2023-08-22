@@ -100,6 +100,10 @@ function create_cell_label_elem(id_prefix,row_num,col_num)
 
 }
 
-
+function save_grid()
+{
+    //save all grid elements to a json file 
+    
+}
 
 export {update_grid,attach_update_grid_to_elems};
